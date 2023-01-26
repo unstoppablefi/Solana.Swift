@@ -56,7 +56,7 @@ public struct Transaction {
     }
 
     // MARK: - Helpers
-    mutating func addSignature(_ signature: Signature) -> Result<Void, Error> {
+    public mutating func addSignature(_ signature: Signature) -> Result<Void, Error> {
         return compile() // Ensure signatures array is populated
             .flatMap { _ in return _addSignature(signature) }
     }
