@@ -82,7 +82,7 @@ public struct HotAccount: Codable, Hashable, Signer {
     }
 }
 
-public struct AccountMeta: Decodable, CustomDebugStringConvertible {
+public struct AccountMeta: Decodable, CustomDebugStringConvertible, Equatable {
     public let publicKey: PublicKey
     public var isSigner: Bool
     public var isWritable: Bool

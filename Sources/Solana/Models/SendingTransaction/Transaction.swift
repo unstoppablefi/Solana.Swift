@@ -293,7 +293,7 @@ public struct Transaction {
 
 public extension Transaction {
     
-    struct Signature {
+    struct Signature: Equatable {
         var signature: Data?
         var publicKey: PublicKey
 
