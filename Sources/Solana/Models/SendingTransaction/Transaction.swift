@@ -294,8 +294,8 @@ public struct Transaction {
 public extension Transaction {
     
     struct Signature: Equatable {
-        var signature: Data?
-        var publicKey: PublicKey
+        public private(set) var signature: Data?
+        public private(set) var publicKey: PublicKey
 
         public init(signature: Data?, publicKey: PublicKey) {
             self.signature = signature
