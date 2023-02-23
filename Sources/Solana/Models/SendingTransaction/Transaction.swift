@@ -20,28 +20,28 @@ public struct Transaction {
     }
 
     // MARK: - Methods
-    public mutating func sign(signers: [Signer]) -> Result<Void, Error> {
-        guard signers.count > 0 else {
-            return .failure(SolanaError.invalidRequest(reason: "No signers"))
-        }
-
-        // unique signers
-        let signers = signers.reduce([Signer](), {signers, signer in
-            var uniqueSigners = signers
-            if !uniqueSigners.contains(where: {$0.publicKey == signer.publicKey}) {
-                uniqueSigners.append(signer)
+    public mutating func sign(signers: [Signer], signatures: [Signature] = []) -> Result<Void, Error> {
+            guard signers.count > 0 else {
+                return .failure(SolanaError.invalidRequest(reason: "No signers"))
             }
-            return uniqueSigners
-        })
 
-        // map signatures
-        signatures = signers.map { Signature(signature: nil, publicKey: $0.publicKey) }
+            // unique signers
+            let signers = signers.reduce([Signer](), {signers, signer in
+                var uniqueSigners = signers
+                if !uniqueSigners.contains(where: {$0.publicKey == signer.publicKey}) {
+                    uniqueSigners.append(signer)
+                }
+                return uniqueSigners
+            })
 
-        // construct message
-        return compile().flatMap { message in
-            return _partialSign(message: message, signers: signers)
+            // map signatures
+            self.signatures = signers.map { Signature(signature: nil, publicKey: $0.publicKey) } + signatures
+
+            // construct message
+            return compile().flatMap { message in
+                return _partialSign(message: message, signers: signers)
+            }
         }
-    }
 
     public mutating func serialize(
         requiredAllSignatures: Bool = true,
