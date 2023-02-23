@@ -20,7 +20,7 @@ public struct Transaction {
     }
 
     // MARK: - Methods
-    public mutating func sign(signers: [Signer]) -> Result<Void, Error> {
+    public mutating func sign(signers: [Signer], signatures: [Signature] = []) -> Result<Void, Error> {
         guard signers.count > 0 else {
             return .failure(SolanaError.invalidRequest(reason: "No signers"))
         }
@@ -35,7 +35,7 @@ public struct Transaction {
         })
 
         // map signatures
-        signatures = signers.map { Signature(signature: nil, publicKey: $0.publicKey) }
+        self.signatures = signers.map { Signature(signature: nil, publicKey: $0.publicKey) } + signatures
 
         // construct message
         return compile().flatMap { message in
